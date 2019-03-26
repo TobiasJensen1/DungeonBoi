@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     {
         pushForce = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         move();
+        CameraMovement();
     }
 
 
@@ -27,6 +28,15 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             transform.position = Vector2.MoveTowards(transform.position, pushForce, 3*Time.deltaTime);
+        }
+    }
+
+
+    void CameraMovement()
+    {
+        if(transform.position.x > Camera.main.transform.position.x)
+        {
+            print("hej");
         }
     }
 }
