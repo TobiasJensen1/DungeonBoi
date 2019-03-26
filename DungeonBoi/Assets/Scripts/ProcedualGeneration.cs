@@ -8,11 +8,8 @@ public class ProcedualGeneration : MonoBehaviour
 {
     public GameObject startChunk;
     public GameObject chunk1;
-    bool hasEast = false;
-    bool hasWest = false;
+    bool spawn = false;
 
-    bool hasNorth = false;
-    bool hasSouth = false;
    
     // Start is called before the first frame update
     void Start()
@@ -33,18 +30,26 @@ public class ProcedualGeneration : MonoBehaviour
 
         if(collision.transform.tag == "Player")
         {
-            if(transform.gameObject.name == "ColliderEast" && !hasEast) { 
-            Instantiate(chunk1, new Vector2(startChunk.transform.position.x + 14, startChunk.transform.position.y), Quaternion.identity);
-            Camera.main.transform.DOMoveX(startChunk.transform.position.x+15, 2);
-                hasEast = true;
-
+            if(transform.gameObject.name == "ColliderEast" && !spawn) {
+            Instantiate(chunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+            Camera.main.transform.DOMoveX(startChunk.transform.position.x+18, 2);
+                spawn = true;
             }
-            if (transform.gameObject.name == "ColliderWest" && !hasWest)
+            if(transform.gameObject.name == "ColliderEast" && spawn)
             {
-                Instantiate(chunk1, new Vector2(startChunk.transform.position.x - 14, startChunk.transform.position.y), Quaternion.identity);
-                Camera.main.transform.DOMoveX(startChunk.transform.position.x -15, 2);
-                hasWest = true;
+                Camera.main.transform.DOMoveX(startChunk.transform.position.x + 18, 2);
             }
+            if (transform.gameObject.name == "ColliderWest" && !spawn)
+            {
+                Instantiate(chunk1, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
+                Camera.main.transform.DOMoveX(startChunk.transform.position.x -18, 2);
+                spawn = true;
+            }
+            if (transform.gameObject.name == "ColliderWest" && spawn)
+            {
+                Camera.main.transform.DOMoveX(startChunk.transform.position.x - 18, 2);
+            }
+            
             
         }
     }
