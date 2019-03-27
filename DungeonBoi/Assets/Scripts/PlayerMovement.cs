@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     {
         pushForce = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         move();
-        CameraMovement();
+        
     }
 
 
@@ -32,11 +32,5 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-    void CameraMovement()
-    {
-        if(transform.position.x > Camera.main.transform.position.x)
-        {
-            print("hej");
-        }
-    }
+
 }

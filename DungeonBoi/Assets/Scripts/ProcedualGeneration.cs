@@ -7,11 +7,15 @@ using DG.Tweening;
 public class ProcedualGeneration : MonoBehaviour
 {
     GameObject test;
-    
+
+    float Randomizer_Enemy;
+
+    Vector2 Enemy_spawner;
     
 
     Vector2 chunkChecker;
 
+    public GameObject spider;
     public GameObject startChunk;
     public GameObject chunk1;
    static bool spawn = false;
@@ -43,7 +47,20 @@ public class ProcedualGeneration : MonoBehaviour
         {
             if(transform.gameObject.name == "ColliderEast" && !spawn) {
               test = Instantiate(chunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
-            
+               if(test.tag == "4Way")
+                {
+                    for (int i = 0; i < 2; i++) {
+                        Randomizer_Enemy = Random.Range(0, 2);
+                        Enemy_spawner = test.transform.Find("EnemySpawner").GetChild(i).position;
+                        print(Randomizer_Enemy);
+                       if(Randomizer_Enemy == 1)
+                        {
+                            Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                        }
+                        print(Enemy_spawner);
+                            }
+                  
+                }
                 chunks.Add(test.transform.position);
                
             Camera.main.transform.DOMoveX(startChunk.transform.position.x+18, 2);
@@ -61,6 +78,25 @@ public class ProcedualGeneration : MonoBehaviour
                 {
                     print("kun 1 gang");
                     test = Instantiate(chunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+
+                    if (test.tag == "4Way")
+                    {
+                        
+                        for (int i = 0; i < 2; i++)
+                        {
+                            Randomizer_Enemy = Random.Range(0, 2);
+                            Enemy_spawner = test.transform.Find("EnemySpawner").GetChild(i).position;
+                            print(Randomizer_Enemy);
+                            if (Randomizer_Enemy == 1)
+                            {
+                                Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                            }
+                            print(Enemy_spawner);
+                        }
+                        
+                    }
+
+
                     chunks.Add(test.transform.position);
                 }
                 if (chunks.Contains(chunkChecker))
