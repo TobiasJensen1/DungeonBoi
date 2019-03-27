@@ -82,7 +82,7 @@ public class ProcedualGeneration : MonoBehaviour
                     if (test.tag == "4Way")
                     {
                         
-                        for (int i = 0; i < 2; i++)
+                        for (int i = 0; i < test.transform.Find("EnemySpawner").transform.childCount; i++)
                         {
                             Randomizer_Enemy = Random.Range(0, 2);
                             Enemy_spawner = test.transform.Find("EnemySpawner").GetChild(i).position;
