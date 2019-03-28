@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3284984598723569228}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.5, y: -0.5, z: 0}
+  m_LocalPosition: {x: -8, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 2.91, z: 1}
   m_Children: []
   m_Father: {fileID: 3284984600627189539}
@@ -70,8 +70,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6935b64f3cde344a91dab433afdb3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spider: {fileID: 0}
   startChunk: {fileID: 3284984600627189565}
-  chunk1: {fileID: 3284984600627189565}
+  ConnecterChunk1: {fileID: 0}
+  ConnecterChunk2: {fileID: 0}
+  ConnecterChunk3: {fileID: 0}
+  EastWestChunk1: {fileID: 0}
+  EastWestChunk2: {fileID: 0}
+  NorthSouthChunk1: {fileID: 0}
 --- !u!1 &3284984599088896361
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +431,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 11
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -1471,7 +1477,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3284984599163590668}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -6, z: 0}
+  m_LocalPosition: {x: 0.5, y: -7, z: 0}
   m_LocalScale: {x: 3.2099998, y: 0.84999996, z: 1}
   m_Children: []
   m_Father: {fileID: 3284984600627189539}
@@ -1515,8 +1521,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6935b64f3cde344a91dab433afdb3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spider: {fileID: 0}
   startChunk: {fileID: 3284984600627189565}
-  chunk1: {fileID: 3284984600627189565}
+  ConnecterChunk1: {fileID: 0}
+  ConnecterChunk2: {fileID: 0}
+  ConnecterChunk3: {fileID: 0}
+  EastWestChunk1: {fileID: 0}
+  EastWestChunk2: {fileID: 0}
+  NorthSouthChunk1: {fileID: 0}
 --- !u!1 &3284984599314712220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,7 +1555,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3284984599314712220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.5, y: -0.5, z: 0}
+  m_LocalPosition: {x: 9, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 2.91, z: 1}
   m_Children: []
   m_Father: {fileID: 3284984600627189539}
@@ -1587,8 +1599,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6935b64f3cde344a91dab433afdb3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spider: {fileID: 0}
   startChunk: {fileID: 3284984600627189565}
-  chunk1: {fileID: 3284984600627189565}
+  ConnecterChunk1: {fileID: 0}
+  ConnecterChunk2: {fileID: 0}
+  ConnecterChunk3: {fileID: 0}
+  EastWestChunk1: {fileID: 0}
+  EastWestChunk2: {fileID: 0}
+  NorthSouthChunk1: {fileID: 0}
 --- !u!1 &3284984599599922349
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,7 +1829,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3284984599686165453}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 5, z: 0}
+  m_LocalPosition: {x: 0.5, y: 5.5, z: 0}
   m_LocalScale: {x: 3.21, y: 0.85, z: 1}
   m_Children: []
   m_Father: {fileID: 3284984600627189539}
@@ -1855,8 +1873,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6935b64f3cde344a91dab433afdb3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spider: {fileID: 0}
   startChunk: {fileID: 3284984600627189565}
-  chunk1: {fileID: 3284984600627189565}
+  ConnecterChunk1: {fileID: 0}
+  ConnecterChunk2: {fileID: 0}
+  ConnecterChunk3: {fileID: 0}
+  EastWestChunk1: {fileID: 0}
+  EastWestChunk2: {fileID: 0}
+  NorthSouthChunk1: {fileID: 0}
 --- !u!1 &3284984600424254568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2852,7 +2876,7 @@ GameObject:
   - component: {fileID: 3284984600627189539}
   - component: {fileID: 3284984600627189538}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: StartChunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

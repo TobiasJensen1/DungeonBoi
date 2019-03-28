@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896079548678931980}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 5.5, z: 0}
+  m_LocalPosition: {x: 0.5, y: 6, z: 0}
   m_LocalScale: {x: 3.21, y: 0.85, z: 1}
   m_Children: []
   m_Father: {fileID: 896079549869007586}
@@ -1614,7 +1614,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 896079549201804749}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -6.5, z: 0}
+  m_LocalPosition: {x: 0.5, y: -7, z: 0}
   m_LocalScale: {x: 3.2099998, y: 0.84999996, z: 1}
   m_Children: []
   m_Father: {fileID: 896079549869007586}
@@ -2667,7 +2667,7 @@ GameObject:
   - component: {fileID: 896079549869007587}
   m_Layer: 0
   m_Name: NorthSouthCorridor
-  m_TagString: Untagged
+  m_TagString: NorthSouth
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -6,33 +6,38 @@ using DG.Tweening;
 
 public class ProcedualGeneration : MonoBehaviour
 {
-    GameObject chunk_to_spawn;
+    //Stores chunk to instantiate
+    GameObject chunkToSpawn;
 
-    float Randomizer_Enemy;
-    int chunkConnecter_rng;
+    
+    
 
-    Vector2 Enemy_spawner;
-
-    Vector3 camera_Pos;
-
+    
+    //Used to check if space is empty
     Vector2 chunkChecker;
 
+    //EnemySpawning
+    Vector2 Enemy_spawner;
+    float Randomizer_Enemy;
+
     public GameObject spider;
-    //Chunks
+    //4Way Chunks
     public GameObject startChunk;
     public GameObject ConnecterChunk1;
     public GameObject ConnecterChunk2;
     public GameObject ConnecterChunk3;
 
-    //one way chunks
+    //2way chunks
     public GameObject EastWestChunk1;
     public GameObject EastWestChunk2;
     public GameObject NorthSouthChunk1;
 
-
-    static bool spawn = false;
-   static List<Vector2> ConnecterChunks = new List<Vector2>();
-     List<GameObject> chunkAmount = new List<GameObject>();
+    //Used for list[rand]
+    int chunkConnecter_rng; 
+    //Lists
+    static List<Vector2> ConnecterChunks = new List<Vector2>();
+    List<GameObject> chunkAmount = new List<GameObject>();
+    public static List<Vector2> blockadeChecker = new List<Vector2>();
 
 
    
@@ -67,156 +72,22 @@ public class ProcedualGeneration : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-       
-        GameObject objectToPlace = ConnecterChunk1;
 
-        
-   
-        
-        if(collision.transform.tag == "Player")
+        if (collision.transform.tag == "Player")
         {
-            if(transform.gameObject.name == "ColliderEast" && !spawn) {
-
-                MultiWay_Chunk_Spawner();
-            }
-            
-            if (transform.gameObject.name == "ColliderEast" && spawn && collision.transform.position.x < transform.position.x)
-            {
-
-                
-              Camera.main.transform.DOMoveX(startChunk.transform.position.x + 17, 2);
-                
-
-                chunkChecker = new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y);
-
-
-                if (!ConnecterChunks.Contains(chunkChecker))
-                {
-                    print("kun 1 gang");
-                    chunk_to_spawn = Instantiate(ConnecterChunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
-                  
-
-                    //rng for spawn af enemies
-                   // enemeySpawner();
-
-
-                    ConnecterChunks.Add(chunk_to_spawn.transform.position);
-                }
-                if (ConnecterChunks.Contains(chunkChecker))
-                {
-                    
-                  
-                }
-
-
-            }
-            
-            if (transform.gameObject.name == "ColliderWest" && !spawn)
-            {
-                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
-
-                ConnecterChunks.Add(chunk_to_spawn.transform.position);
-                
-
-                Camera.main.transform.DOMoveX(startChunk.transform.position.x -17, 2);
-                spawn = true;
-            }
-            if (transform.gameObject.name == "ColliderWest" && spawn && collision.transform.position.x > transform.position.x)
-            {
-                Camera.main.transform.DOMoveX(startChunk.transform.position.x - 17, 2);
-
-                chunkChecker = new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y);
-
-                if (!ConnecterChunks.Contains(chunkChecker))
-                {
-                    chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                    print("kun 1 gang");
-                    chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
-                    ConnecterChunks.Add(chunk_to_spawn.transform.position);
-                }
-                if (ConnecterChunks.Contains(chunkChecker))
-                {
-                    print("nope");
-
-                }
-
-            }
-
-
-            if (transform.gameObject.name == "ColliderSouth" && !spawn)
-            {
-                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13), Quaternion.identity);
-
-                ConnecterChunks.Add(chunk_to_spawn.transform.position);
-
-
-                Camera.main.transform.DOMoveY(startChunk.transform.position.y - 14, 2);
-                spawn = true;
-            }   
-            if (transform.gameObject.name == "ColliderSouth" && spawn && collision.transform.position.y > transform.position.y)
-            {
-                Camera.main.transform.DOMoveY(startChunk.transform.position.y - 14, 2);
-
-                chunkChecker = new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13);
-
-                if (!ConnecterChunks.Contains(chunkChecker))
-                {
-                    chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                    print("kun 1 gang");
-                    chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13), Quaternion.identity);
-                    ConnecterChunks.Add(chunk_to_spawn.transform.position);
-                }
-                if (ConnecterChunks.Contains(chunkChecker))
-                {
-                    print("nope");
-
-                }
-
-            }
-            if (transform.gameObject.name == "ColliderNorth" && !spawn)
-            {
-                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13), Quaternion.identity);
-
-                ConnecterChunks.Add(chunk_to_spawn.transform.position);
-
-
-                Camera.main.transform.DOMoveY(startChunk.transform.position.y + 12, 2);
-                spawn = true;
-            }
-            if (transform.gameObject.name == "ColliderNorth" && spawn && collision.transform.position.y < transform.position.y)
-            {
-                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
-                Camera.main.transform.DOMoveY(startChunk.transform.position.y + 12, 2);
-
-                chunkChecker = new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13);
-
-                if (!ConnecterChunks.Contains(chunkChecker))
-                {
-                    print("kun 1 gang");
-                    chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13), Quaternion.identity);
-                    ConnecterChunks.Add(chunk_to_spawn.transform.position);
-                }
-                if (ConnecterChunks.Contains(chunkChecker))
-                {
-                    print("nope");
-
-                }
-
-            }
-
+            onCollisionEast(collision);
+            onCollisionWest(collision);
+            onCollisionNorth(collision);
+            onCollisionSouth(collision);
         }
-        
     }
 
-    public void enemeySpawner()
+    public void enemySpawner()
     {
         for (int i = 0; i < 2; i++)
         {
             Randomizer_Enemy = Random.Range(0, 2);
-            Enemy_spawner = chunk_to_spawn.transform.Find("EnemySpawner").GetChild(i).position;
+            Enemy_spawner = chunkToSpawn.transform.Find("EnemySpawner").GetChild(i).position;
             print(Randomizer_Enemy);
             if (Randomizer_Enemy == 1)
             {
@@ -226,25 +97,78 @@ public class ProcedualGeneration : MonoBehaviour
         }
     }
 
-    public void MultiWay_Chunk_Spawner()
+
+
+    public void onCollisionEast(Collider2D collision)
     {
-        chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
+        if (transform.gameObject.name == "ColliderEast" && collision.transform.position.x < transform.position.x)
+        {
+            Camera.main.transform.DOMoveX(startChunk.transform.position.x + 17, 2);
+            chunkChecker = new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y);
 
-        chunk_to_spawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+            if (!ConnecterChunks.Contains(chunkChecker))
+            {
+                print("kun 1 gang");
+                chunkToSpawn = Instantiate(ConnecterChunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+                //rng for spawn af enemies
+                // enemySpawner();
+                ConnecterChunks.Add(chunkToSpawn.transform.position);
+            }
 
+        }
+    }
+        public void onCollisionWest(Collider2D collision)
+        {
+        if (transform.gameObject.name == "ColliderWest" && collision.transform.position.x > transform.position.x)
+        {
+            Camera.main.transform.DOMoveX(startChunk.transform.position.x - 17, 2);
 
-     //   enemeySpawner();
+            chunkChecker = new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y);
 
-        ConnecterChunks.Add(chunk_to_spawn.transform.position);
+            if (!ConnecterChunks.Contains(chunkChecker))
+            {
+                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
+                print("kun 1 gang");
+                chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
+                ConnecterChunks.Add(chunkToSpawn.transform.position);
+            }
+        }
+    }
 
+    public void onCollisionNorth(Collider2D collision)
+    {
 
-        camera_Pos = chunk_to_spawn.transform.Find("CameraPoint").transform.position;
+        if (transform.gameObject.name == "ColliderNorth" && collision.transform.position.y < transform.position.y)
+        {
+            chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
+            Camera.main.transform.DOMoveY(startChunk.transform.position.y + 12, 2);
 
-        Camera.main.transform.DOMoveX(camera_Pos.x, 2);
-        spawn = true;
-    } 
-   
-    
-    
+            chunkChecker = new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13);
 
+            if (!ConnecterChunks.Contains(chunkChecker))
+            {
+                print("kun 1 gang");
+                chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13), Quaternion.identity);
+                ConnecterChunks.Add(chunkToSpawn.transform.position);
+            }
+        }
+    }
+
+    public void onCollisionSouth(Collider2D collision)
+    {
+        if (transform.gameObject.name == "ColliderSouth" && collision.transform.position.y > transform.position.y)
+        {
+            Camera.main.transform.DOMoveY(startChunk.transform.position.y - 14, 2);
+
+            chunkChecker = new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13);
+
+            if (!ConnecterChunks.Contains(chunkChecker))
+            {
+                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
+                print("kun 1 gang");
+                chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13), Quaternion.identity);
+                ConnecterChunks.Add(chunkToSpawn.transform.position);
+            }
+        }
+    }
 }
