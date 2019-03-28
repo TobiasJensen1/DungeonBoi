@@ -108,8 +108,33 @@ public class ProcedualGeneration : MonoBehaviour
 
             if (!ConnecterChunks.Contains(chunkChecker))
             {
-                print("kun 1 gang");
-                chunkToSpawn = Instantiate(ConnecterChunk1, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+                chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
+                
+                chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
+
+                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
+
+                if (chunkToSpawn.transform.tag == "4Way") {
+                    
+                    print(chunkToSpawn.transform.position);
+                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    {
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                    }
+                }
+
+
+                if (chunkToSpawn.transform.tag == "EastWest")
+                {
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
+                    for(int i = 0; i < blockadeChecker.Count; i++)
+                    {
+                        print(blockadeChecker[i]);
+                    }
+                }
+
                 //rng for spawn af enemies
                 // enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
@@ -130,6 +155,32 @@ public class ProcedualGeneration : MonoBehaviour
                 chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
                 print("kun 1 gang");
                 chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
+
+                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
+
+                if (chunkToSpawn.transform.tag == "4Way")
+                {
+
+                    print(chunkToSpawn.transform.position);
+                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    {
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                    }
+                }
+
+
+                if (chunkToSpawn.transform.tag == "EastWest")
+                {
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
+                    for (int i = 0; i < blockadeChecker.Count; i++)
+                    {
+                        print(blockadeChecker[i]);
+                    }
+                }
+
+
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
             }
         }
@@ -149,6 +200,30 @@ public class ProcedualGeneration : MonoBehaviour
             {
                 print("kun 1 gang");
                 chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13), Quaternion.identity);
+
+                if (chunkToSpawn.transform.tag == "4Way")
+                {
+
+                    print(chunkToSpawn.transform.position);
+                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    {
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                    }
+                }
+
+
+                if (chunkToSpawn.transform.tag == "NorthSouth")
+                {
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
+                    for (int i = 0; i < blockadeChecker.Count; i++)
+                    {
+                        print(blockadeChecker[i]);
+                    }
+                }
+
+
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
             }
         }
@@ -167,6 +242,29 @@ public class ProcedualGeneration : MonoBehaviour
                 chunkConnecter_rng = Random.Range(0, chunkAmount.Count);
                 print("kun 1 gang");
                 chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13), Quaternion.identity);
+
+                if (chunkToSpawn.transform.tag == "4Way")
+                {
+
+                    print(chunkToSpawn.transform.position);
+                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    {
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
+                        chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                    }
+                }
+
+
+                if (chunkToSpawn.transform.tag == "NorthSouth")
+                {
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
+                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
+                    for (int i = 0; i < blockadeChecker.Count; i++)
+                    {
+                        print(blockadeChecker[i]);
+                    }
+                }
+
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
             }
         }
