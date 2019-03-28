@@ -36,11 +36,13 @@ public class ProcedualGeneration : MonoBehaviour
     int chunkConnecter_rng; 
     //Lists
     static List<Vector2> ConnecterChunks = new List<Vector2>();
+    static List<GameObject> spawnedChunks = new List<GameObject>();
     List<GameObject> chunkAmount = new List<GameObject>();
-    public static List<Vector2> blockadeChecker = new List<Vector2>();
+    public static List<Vector2> blockadeCheckerEastWest = new List<Vector2>();
+    public static List<Vector2> blockadeCheckerNorthSouth = new List<Vector2>();
 
 
-   
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,23 +84,6 @@ public class ProcedualGeneration : MonoBehaviour
         }
     }
 
-    public void enemySpawner()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            Randomizer_Enemy = Random.Range(0, 2);
-            Enemy_spawner = chunkToSpawn.transform.Find("EnemySpawner").GetChild(i).position;
-            print(Randomizer_Enemy);
-            if (Randomizer_Enemy == 1)
-            {
-                Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
-            }
-            print(Enemy_spawner);
-        }
-    }
-
-
-
     public void onCollisionEast(Collider2D collision)
     {
         if (transform.gameObject.name == "ColliderEast" && collision.transform.position.x < transform.position.x)
@@ -112,12 +97,19 @@ public class ProcedualGeneration : MonoBehaviour
                 
                 chunkToSpawn = Instantiate(chunkAmount[chunkConnecter_rng].gameObject, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
 
-                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
+                //ikke færdig
+                /*
+                for(int i = 0; i < spawnedChunks.Count; i++)
+                {
+                    if(spawnedChunks[i].transform.position ==  )
+                }
+                */
 
+                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
                 if (chunkToSpawn.transform.tag == "4Way") {
                     
                     print(chunkToSpawn.transform.position);
-                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    if (blockadeCheckerEastWest.Contains(chunkToSpawn.transform.position))
                     {
                         chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
                         chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
@@ -127,17 +119,14 @@ public class ProcedualGeneration : MonoBehaviour
 
                 if (chunkToSpawn.transform.tag == "EastWest")
                 {
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
-                    for(int i = 0; i < blockadeChecker.Count; i++)
-                    {
-                        print(blockadeChecker[i]);
-                    }
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
                 }
 
                 //rng for spawn af enemies
-                // enemySpawner();
+                enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
+                spawnedChunks.Add(chunkToSpawn);
             }
 
         }
@@ -162,7 +151,7 @@ public class ProcedualGeneration : MonoBehaviour
                 {
 
                     print(chunkToSpawn.transform.position);
-                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    if (blockadeCheckerEastWest.Contains(chunkToSpawn.transform.position))
                     {
                         chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
                         chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
@@ -172,16 +161,15 @@ public class ProcedualGeneration : MonoBehaviour
 
                 if (chunkToSpawn.transform.tag == "EastWest")
                 {
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
-                    for (int i = 0; i < blockadeChecker.Count; i++)
-                    {
-                        print(blockadeChecker[i]);
-                    }
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
+
                 }
 
-
+                //rng for spawn af enemies
+                enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
+                spawnedChunks.Add(chunkToSpawn);
             }
         }
     }
@@ -205,7 +193,7 @@ public class ProcedualGeneration : MonoBehaviour
                 {
 
                     print(chunkToSpawn.transform.position);
-                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    if (blockadeCheckerNorthSouth.Contains(chunkToSpawn.transform.position))
                     {
                         chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                         chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
@@ -215,16 +203,14 @@ public class ProcedualGeneration : MonoBehaviour
 
                 if (chunkToSpawn.transform.tag == "NorthSouth")
                 {
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
-                    for (int i = 0; i < blockadeChecker.Count; i++)
-                    {
-                        print(blockadeChecker[i]);
-                    }
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
                 }
 
-
+                //rng for spawn af enemies
+                enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
+                spawnedChunks.Add(chunkToSpawn);
             }
         }
     }
@@ -247,7 +233,7 @@ public class ProcedualGeneration : MonoBehaviour
                 {
 
                     print(chunkToSpawn.transform.position);
-                    if (blockadeChecker.Contains(chunkToSpawn.transform.position))
+                    if (blockadeCheckerNorthSouth.Contains(chunkToSpawn.transform.position))
                     {
                         chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                         chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
@@ -257,15 +243,34 @@ public class ProcedualGeneration : MonoBehaviour
 
                 if (chunkToSpawn.transform.tag == "NorthSouth")
                 {
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
-                    blockadeChecker.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
-                    for (int i = 0; i < blockadeChecker.Count; i++)
-                    {
-                        print(blockadeChecker[i]);
-                    }
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
                 }
 
+                //rng for spawn af enemies
+                enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
+                spawnedChunks.Add(chunkToSpawn);
+            }
+        }
+    }
+    public void enemySpawner()
+    {
+
+        if (chunkToSpawn.transform.Find("EnemySpawner") != null)
+        {
+
+            for (int i = 0; i < 2; i++)
+            {
+                Randomizer_Enemy = Random.Range(0, 2);
+
+                Enemy_spawner = chunkToSpawn.transform.Find("EnemySpawner").GetChild(i).position;
+                print(Randomizer_Enemy);
+                if (Randomizer_Enemy == 1)
+                {
+                    Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                }
+                print(Enemy_spawner);
             }
         }
     }
