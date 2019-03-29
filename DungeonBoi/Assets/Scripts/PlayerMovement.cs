@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody2D rb;
     Vector2 pushForce;
+    public float speed;
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            transform.position = Vector2.MoveTowards(transform.position, pushForce, 3*Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, pushForce, speed*Time.deltaTime);
         }
     }
 
