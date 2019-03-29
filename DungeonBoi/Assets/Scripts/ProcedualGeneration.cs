@@ -9,10 +9,10 @@ public class ProcedualGeneration : MonoBehaviour
     //Stores chunk to instantiate
     GameObject chunkToSpawn;
 
-    
-    
 
-    
+
+
+
     //Used to check if space is empty
     Vector2 chunkChecker;
 
@@ -33,8 +33,8 @@ public class ProcedualGeneration : MonoBehaviour
     public GameObject NorthSouthChunk1;
 
     //Used for list[rand]
-    int chunkRandom1;
-    int chunkRandom2;
+    static int chunkRandom1;
+    static int chunkRandom2;
     //Lists
     static List<Vector2> ConnecterChunks = new List<Vector2>();
     static List<GameObject> spawnedChunks = new List<GameObject>();
@@ -42,9 +42,9 @@ public class ProcedualGeneration : MonoBehaviour
     public static List<Vector2> blockadeCheckerEastWest = new List<Vector2>();
     public static List<Vector2> blockadeCheckerNorthSouth = new List<Vector2>();
 
-
-    public static List<Vector2> eastWestChunks = new List<Vector2>();
-    public static List<Vector2> northSouthChunks = new List<Vector2>();
+    public static List<GameObject> allWayChunks = new List<GameObject>();
+    public static List<GameObject> eastWestChunks = new List<GameObject>();
+    public static List<GameObject> northSouthChunks = new List<GameObject>();
 
 
 
@@ -58,7 +58,7 @@ public class ProcedualGeneration : MonoBehaviour
             chunkAmount.Add(ConnecterChunk3);
             chunkAmount.Add(EastWestChunk1);
             chunkAmount.Add(EastWestChunk2);
-           
+
         }
         if (transform.name == "ColliderNorth" || transform.name == "ColliderSouth")
         {
@@ -66,7 +66,7 @@ public class ProcedualGeneration : MonoBehaviour
             chunkAmount.Add(ConnecterChunk2);
             chunkAmount.Add(ConnecterChunk3);
             chunkAmount.Add(NorthSouthChunk1);
-           
+
         }
         ConnecterChunks.Add(startChunk.transform.position);
     }
@@ -74,7 +74,7 @@ public class ProcedualGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-      
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -101,101 +101,86 @@ public class ProcedualGeneration : MonoBehaviour
 
                 chunkRandom1 = Random.Range(0, chunkAmount.Count);
 
-                while(chunkRandom1 == chunkRandom2)
+                while (chunkRandom1 == chunkRandom2)
                 {
                     chunkRandom1 = Random.Range(0, chunkAmount.Count);
                 }
 
                 chunkToSpawn = Instantiate(chunkAmount[chunkRandom1].gameObject, new Vector2(startChunk.transform.position.x + 17, startChunk.transform.position.y), Quaternion.identity);
                 chunkRandom2 = chunkRandom1;
+            }
 
-                if (chunkToSpawn.tag == "4Way")
+            if (chunkToSpawn.tag == "4Way")
+            {
+                allWayChunks.Add(chunkToSpawn);
+            }
+
+
+            if (chunkToSpawn.tag == "EastWest")
+            {
+
+                eastWestChunks.Add(chunkToSpawn);
+                blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
+            }
+
+
+            for (int i = 0; i < allWayChunks.Count; i++)
+            {
+                for (int j = 0; j < eastWestChunks.Count; j++)
                 {
-                    for (int j = 0; j < eastWestChunks.Count; j++)
+                    if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y - 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
                     {
-                        if (chunkToSpawn.transform.position.y == eastWestChunks[j].y - 13 && chunkToSpawn.transform.position.x == eastWestChunks[j].x)
-                        {
-                            print("eastcollider 1");
-                            chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                        }
-                        if (chunkToSpawn.transform.position.y == eastWestChunks[j].y + 13 && chunkToSpawn.transform.position.x == eastWestChunks[j].x)
-                        {
-                            print("eastcollider 2");
-                            chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                        }
+                        allWayChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                    }
+                    if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y + 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
+                    {
+                        allWayChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                    }
+                }
+                for (int k = 0; k < northSouthChunks.Count; k++)
+                {
+                    if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x - 17)
+                    {
+                        allWayChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                    }
+                    if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x + 17)
+                    {
+                        allWayChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                     }
                 }
 
+            }
 
-                /*
-
-
-                //Retroactive 4way blocking
-                if (chunkToSpawn.transform.tag == "EastWest") { 
-                for(int i = 0; i < spawnedChunks.Count; i++)
+            for (int i = 0; i < eastWestChunks.Count; i++)
+            {
+                for (int j = 0; j < northSouthChunks.Count; j++)
                 {
-                    if(spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y - 13 || spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y +13)
+                    if (eastWestChunks[i].transform.position.x + 17 == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y)
                     {
-                            if(spawnedChunks[i].transform.tag == "4Way")
-                            {
-                                if(spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y - 13)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                                }
-                                if (spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y + 13)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                                }
-                            }
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
+                    }
+                    if (eastWestChunks[i].transform.position.x - 17 == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y)
+                    {
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
                     }
                 }
-                }
-
-                
-                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
-                if (chunkToSpawn.transform.tag == "4Way") {
-                    
-                    if (blockadeCheckerEastWest.Contains(chunkToSpawn.transform.position))
-                    {
-
-                        for(int i = 0; i < blockadeCheckerEastWest.Count; i++)
-                        {
-                            if (blockadeCheckerEastWest[i].y == chunkToSpawn.transform.position.y)
-                            {
-                                chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                            }
-
-                            else
-                            {
-                                chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                            }
-                        }
-
-                        
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                    }
-                }
-                */
-
-                if (chunkToSpawn.transform.tag == "EastWest")
-                {
-                    eastWestChunks.Add(chunkToSpawn.transform.position);
-                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
-                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
-                }
-
-                //rng for spawn af enemies
-                enemySpawner();
+            }
+            //rng for spawn af enemies
+            enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
                 spawnedChunks.Add(chunkToSpawn);
                 chunkToSpawn = null;
-            }
-
+            
         }
     }
-        public void onCollisionWest(Collider2D collision)
-        {
+
+
+
+
+
+    public void onCollisionWest(Collider2D collision)
+    {
         if (transform.gameObject.name == "ColliderWest" && collision.transform.position.x > transform.position.x)
         {
             Camera.main.transform.DOMoveX(startChunk.transform.position.x - 17, 2);
@@ -205,187 +190,175 @@ public class ProcedualGeneration : MonoBehaviour
             if (!ConnecterChunks.Contains(chunkChecker))
             {
                 chunkRandom1 = Random.Range(0, chunkAmount.Count);
-                chunkToSpawn = Instantiate(chunkAmount[chunkRandom1].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
 
+                while (chunkRandom1 == chunkRandom2)
+                {
+                    chunkRandom1 = Random.Range(0, chunkAmount.Count);
+                }
+                chunkToSpawn = Instantiate(chunkAmount[chunkRandom1].gameObject, new Vector2(startChunk.transform.position.x - 17, startChunk.transform.position.y), Quaternion.identity);
+                chunkRandom2 = chunkRandom1;
+
+            }
                 if (chunkToSpawn.tag == "4Way")
+                {
+                    allWayChunks.Add(chunkToSpawn);
+                }
+                
+                if (chunkToSpawn.transform.tag == "EastWest")
+                {
+                    eastWestChunks.Add(chunkToSpawn);
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
+                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
+                }
+
+
+                for (int i = 0; i < allWayChunks.Count; i++)
                 {
                     for (int j = 0; j < eastWestChunks.Count; j++)
                     {
-                        if (chunkToSpawn.transform.position.y == eastWestChunks[j].y - 13 && chunkToSpawn.transform.position.x == eastWestChunks[j].x)
+                        if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y - 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
                         {
-                            print("westcollider 1");
-                            chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                            allWayChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
                         }
-                        if (chunkToSpawn.transform.position.y == eastWestChunks[j].y + 13 && chunkToSpawn.transform.position.x == eastWestChunks[j].x)
+                        if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y + 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
                         {
-                            print("westcollider 2");
-                            chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                            allWayChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
                         }
-                       
                     }
-
-                }
-
-
-
-
-
-                /*
-                for (int i = 0; i < spawnedChunks.Count; i++)
-                {
-                    if (spawnedChunks[i].tag == "4Way")
+                    for (int k = 0; k < northSouthChunks.Count; k++)
                     {
-                        for (int j = 0; j < blockadeCheckerEastWest.Count; j++)
+                        if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x - 17)
                         {
-                            if (spawnedChunks[i].transform.position.y + 13 == blockadeCheckerEastWest[j].y)
-                            {
-                                spawnedChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                            }
-                            if (spawnedChunks[i].transform.position.y - 13 == blockadeCheckerEastWest[j].y)
-                            {
-                                spawnedChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                            }
-                            if (spawnedChunks[i].transform.position.x - 17 == blockadeCheckerEastWest[j].x)
-                            {
-                                spawnedChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
-                            }
-                            if (spawnedChunks[i].transform.position.x + 17 == blockadeCheckerEastWest[j].x)
-                            {
-                                spawnedChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
-                            }
+                            allWayChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
                         }
-
-                    }
-                }
-               */
-
-                /*
-                //Retroactive 4way blocking
-                if (chunkToSpawn.transform.tag == "EastWest")
-                {
-
-
-
-                    for (int i = 0; i < spawnedChunks.Count; i++)
-                    {
-                        if (spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y - 13 || spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y + 13)
+                        if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x + 17)
                         {
-                            if (spawnedChunks[i].transform.tag == "4Way")
-                            {
-                                if (spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y - 13)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                                }
-                                if (spawnedChunks[i].transform.position.y == chunkToSpawn.transform.position.y + 13)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
-                                }
-                            }
+                            allWayChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                         }
                     }
                 }
 
-
-                //If eastWest room spawned, save coordinates next to it to prevent 4way spawning
-
-                if (chunkToSpawn.transform.tag == "4Way")
+            for (int i = 0; i < eastWestChunks.Count; i++)
+            {
+                for (int j = 0; j < northSouthChunks.Count; j++)
                 {
-
-                    print(chunkToSpawn.transform.position);
-                    if (blockadeCheckerEastWest.Contains(chunkToSpawn.transform.position))
+                    if (eastWestChunks[i].transform.position.x + 17 == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y)
                     {
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
+                    }
+                    if (eastWestChunks[i].transform.position.x - 17 == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y)
+                    {
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
                     }
                 }
-                */
-
-                if (chunkToSpawn.transform.tag == "EastWest")
-                {
-                    eastWestChunks.Add(chunkToSpawn.transform.position);
-                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y + 13));
-                    blockadeCheckerEastWest.Add(new Vector2(chunkToSpawn.transform.position.x, chunkToSpawn.transform.position.y - 13));
-
-                }
-
-                //rng for spawn af enemies
-                enemySpawner();
-                ConnecterChunks.Add(chunkToSpawn.transform.position);
-                spawnedChunks.Add(chunkToSpawn);
-                chunkToSpawn = null;
             }
+
+
+
+
+
+
+            //rng for spawn af enemies
+            enemySpawner();
+            ConnecterChunks.Add(chunkToSpawn.transform.position);
+            spawnedChunks.Add(chunkToSpawn);
+            chunkToSpawn = null;
         }
     }
+
 
     public void onCollisionNorth(Collider2D collision)
     {
 
         if (transform.gameObject.name == "ColliderNorth" && collision.transform.position.y < transform.position.y)
         {
-            chunkRandom1 = Random.Range(0, chunkAmount.Count);
+
+
+
+            
             Camera.main.transform.DOMoveY(startChunk.transform.position.y + 12, 2);
 
             chunkChecker = new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13);
 
             if (!ConnecterChunks.Contains(chunkChecker))
             {
+
+                chunkRandom1 = Random.Range(0, chunkAmount.Count);
+
+                while (chunkRandom1 == chunkRandom2)
+                {
+                    chunkRandom1 = Random.Range(0, chunkAmount.Count);
+                }
                 chunkToSpawn = Instantiate(chunkAmount[chunkRandom1].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y + 13), Quaternion.identity);
 
-                
+                chunkRandom2 = chunkRandom1;
 
-                
+            }
 
-                //Retroactive 4way blocking
+
+                if (chunkToSpawn.tag == "4Way")
+                {
+                    allWayChunks.Add(chunkToSpawn);
+                }
+
+
+
                 if (chunkToSpawn.transform.tag == "NorthSouth")
                 {
-                    for (int i = 0; i < spawnedChunks.Count; i++)
+                    northSouthChunks.Add(chunkToSpawn);
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x + 17, chunkToSpawn.transform.position.y));
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x - 17, chunkToSpawn.transform.position.y));
+                }
+
+                    for (int i = 0; i < allWayChunks.Count; i++)
                     {
-                        if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x - 17 || spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x + 17)
+                        for (int j = 0; j < eastWestChunks.Count; j++)
                         {
-                            if (spawnedChunks[i].transform.tag == "4Way")
+                            if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y - 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
                             {
-                                if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x - 17)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
-                                }
-                                if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x + 17)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
-                                }
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                            }
+                            if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y + 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                            }
+                        }
+                        for (int k = 0; k < northSouthChunks.Count; k++)
+                        {
+                            if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x - 17)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                            }
+                            if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x + 17)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                             }
                         }
                     }
-                }
 
-                
-                //If NorthSouth room spawned, save coordinates next to it to prevent 4way spawning
-
-                if (chunkToSpawn.transform.tag == "4Way")
+            for (int i = 0; i < eastWestChunks.Count; i++)
+            {
+                for (int j = 0; j < northSouthChunks.Count; j++)
                 {
-
-                    if (blockadeCheckerNorthSouth.Contains(chunkToSpawn.transform.position))
+                    if (eastWestChunks[i].transform.position.x == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y - 13)
                     {
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                    }
+                    if (eastWestChunks[i].transform.position.x == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y + 13)
+                    {
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
                     }
                 }
+            }
 
-    
-                if (chunkToSpawn.transform.tag == "NorthSouth")
-                {
-                    northSouthChunks.Add(chunkToSpawn.transform.position);
-                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
-                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
-                }
-
-                //rng for spawn af enemies
-                enemySpawner();
+            //rng for spawn af enemies
+            enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
                 spawnedChunks.Add(chunkToSpawn);
                 chunkToSpawn = null;
             }
         }
-    }
+    
 
     public void onCollisionSouth(Collider2D collision)
     {
@@ -397,62 +370,84 @@ public class ProcedualGeneration : MonoBehaviour
 
             if (!ConnecterChunks.Contains(chunkChecker))
             {
+
+
                 chunkRandom1 = Random.Range(0, chunkAmount.Count);
+
+                while (chunkRandom1 == chunkRandom2)
+                {
+                    chunkRandom1 = Random.Range(0, chunkAmount.Count);
+                }
                 chunkToSpawn = Instantiate(chunkAmount[chunkRandom1].gameObject, new Vector2(startChunk.transform.position.x, startChunk.transform.position.y - 13), Quaternion.identity);
+                chunkRandom2 = chunkRandom1;
 
-                
+                }
 
-                
 
-                //Retroactive 4way blocking
+                if (chunkToSpawn.tag == "4Way")
+                {
+                    allWayChunks.Add(chunkToSpawn);
+                }
+
                 if (chunkToSpawn.transform.tag == "NorthSouth")
                 {
-                    for (int i = 0; i < spawnedChunks.Count; i++)
+                    northSouthChunks.Add(chunkToSpawn);
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x + 17, chunkToSpawn.transform.position.y));
+                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x - 17, chunkToSpawn.transform.position.y));
+                }
+
+                    for (int i = 0; i < allWayChunks.Count; i++)
                     {
-                        if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x - 17 || spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x + 17)
+                        for (int j = 0; j < eastWestChunks.Count; j++)
                         {
-                            if (spawnedChunks[i].transform.tag == "4Way")
+                            if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y - 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
                             {
-                                if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x - 17)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
-                                }
-                                if (spawnedChunks[i].transform.position.x == chunkToSpawn.transform.position.x + 17)
-                                {
-                                    spawnedChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
-                                }
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                            }
+                            if (eastWestChunks[j].transform.position.y == allWayChunks[i].transform.position.y + 13 && eastWestChunks[j].transform.position.x == allWayChunks[i].transform.position.x)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
+                            }
+                        }
+                        for (int k = 0; k < northSouthChunks.Count; k++)
+                        {
+                            if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x - 17)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                            }
+                            if (northSouthChunks[k].transform.position.y == allWayChunks[i].transform.position.y && northSouthChunks[k].transform.position.x == allWayChunks[i].transform.position.x + 17)
+                            {
+                                allWayChunks[i].transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
                             }
                         }
                     }
-                }
 
-    
-                //If NorthSouth room spawned, save coordinates next to it to prevent 4way spawning
-                if (chunkToSpawn.transform.tag == "4Way")
+            for (int i = 0; i < eastWestChunks.Count; i++)
+            {
+                for (int j = 0; j < northSouthChunks.Count; j++)
                 {
-                    if (blockadeCheckerNorthSouth.Contains(chunkToSpawn.transform.position))
+                    if (eastWestChunks[i].transform.position.x == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y - 13)
                     {
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(true);
-                        chunkToSpawn.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(true);
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(true);
+                    }
+                    if (eastWestChunks[i].transform.position.x == northSouthChunks[j].transform.position.x && eastWestChunks[i].transform.position.y == northSouthChunks[j].transform.position.y + 13)
+                    {
+                        eastWestChunks[i].transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(true);
                     }
                 }
+            }
 
-    
-                if (chunkToSpawn.transform.tag == "NorthSouth")
-                {
-                    northSouthChunks.Add(chunkToSpawn.transform.position);
-                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x +17, chunkToSpawn.transform.position.y));
-                    blockadeCheckerNorthSouth.Add(new Vector2(chunkToSpawn.transform.position.x -17, chunkToSpawn.transform.position.y));
-                }
 
-                //rng for spawn af enemies
-                enemySpawner();
+
+
+            //rng for spawn af enemies
+            enemySpawner();
                 ConnecterChunks.Add(chunkToSpawn.transform.position);
                 spawnedChunks.Add(chunkToSpawn);
                 chunkToSpawn = null;
             }
         }
-    }
+    
 
 
     public void enemySpawner()
