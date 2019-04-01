@@ -9,10 +9,6 @@ public class ProcedualGeneration : MonoBehaviour
     //Stores chunk to instantiate
     GameObject chunkToSpawn;
 
-
-
-
-
     //Used to check if space is empty
     Vector2 chunkChecker;
 
@@ -70,6 +66,8 @@ public class ProcedualGeneration : MonoBehaviour
 
         }
         ConnecterChunks.Add(startChunk.transform.position);
+
+        //Adds hub to list to make blockades work, and disables all on start
         allWayChunks.Add(hub);
 
         hub.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(false);
