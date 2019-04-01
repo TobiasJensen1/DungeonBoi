@@ -71,6 +71,11 @@ public class ProcedualGeneration : MonoBehaviour
         }
         ConnecterChunks.Add(startChunk.transform.position);
         allWayChunks.Add(hub);
+
+        hub.transform.Find("Blockades").transform.Find("East").transform.gameObject.SetActive(false);
+        hub.transform.Find("Blockades").transform.Find("West").transform.gameObject.SetActive(false);
+        hub.transform.Find("Blockades").transform.Find("North").transform.gameObject.SetActive(false);
+        hub.transform.Find("Blockades").transform.Find("South").transform.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
