@@ -8,16 +8,20 @@ public class SpooderStats : MonoBehaviour
 
     public float health;
     public float damage;
+    public float xp;
+
+    float maxHealth;
 
     // Start is called before the first frame update
     void Start()
     {
 
+        maxHealth = health;
     }
 
     // Update is called once per frame
     void Update()
     {
-        healthBar.setHealth(health / 5);
+        healthBar.setHealth(health / maxHealth);
     }
 }

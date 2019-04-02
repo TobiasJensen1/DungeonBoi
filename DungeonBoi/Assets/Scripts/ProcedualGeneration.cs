@@ -17,6 +17,7 @@ public class ProcedualGeneration : MonoBehaviour
     float Randomizer_Enemy;
 
     public GameObject spider;
+    GameObject spider2;
     //4Way Chunks
     public GameObject hub;
     public GameObject startChunk;
@@ -43,11 +44,15 @@ public class ProcedualGeneration : MonoBehaviour
     public static List<GameObject> eastWestChunks = new List<GameObject>();
     public static List<GameObject> northSouthChunks = new List<GameObject>();
 
+    float playerLevel;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
+        spider2 = Resources.Load<GameObject>("spider2");
+
         if (transform.name == "ColliderEast" || transform.name == "ColliderWest")
         {
             chunkAmount.Add(ConnecterChunk1);
@@ -79,7 +84,7 @@ public class ProcedualGeneration : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        playerLevel = GameObject.Find("Player").GetComponent<PlayerStats>().level;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -477,14 +482,31 @@ public class ProcedualGeneration : MonoBehaviour
         if (chunkToSpawn.transform.Find("EnemySpawner") != null)
         {
 
-            for (int i = 0; i < 1; i++)
+
+            float spawns = chunkToSpawn.transform.Find("EnemySpawner").transform.childCount;
+            for (int i = 0; i < spawns; i++)
             {
                 Randomizer_Enemy = Random.Range(0, 2);
 
                 Enemy_spawner = chunkToSpawn.transform.Find("EnemySpawner").GetChild(i).position;
                 if (Randomizer_Enemy == 1)
                 {
+                    if(playerLevel >= 2)
+                    {
+                        float mobToSpawn = Random.Range(0, 2);
+                        print(mobToSpawn);
+                        if(mobToSpawn == 1)
+                        {
+                            Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                        } else
+                        {
+                            Instantiate(spider2, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                        }
+                    }
+                    else
+                    { 
                     Instantiate(spider, new Vector2(Enemy_spawner.x, Enemy_spawner.y), Quaternion.identity);
+                    }
                 }
             }
         }

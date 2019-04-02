@@ -9,9 +9,7 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         bar = transform.Find("Bar");
-        
     }
 
     public void setHealth(float health)

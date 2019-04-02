@@ -514,3 +514,4 @@ MonoBehaviour:
   healthBar: {fileID: 5543576826537654700}
   health: 5
   damage: 1
+  xp: 4
