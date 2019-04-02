@@ -8,6 +8,7 @@ TagManager:
   - EastWest
   - NorthSouth
   - Enemy
+  - Ground
   layers:
   - Default
   - TransparentFX

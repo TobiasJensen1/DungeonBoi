@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/DungeonBoi.unity
+    guid: 8e4f73152f2d42c4e83726a5e4c0495e
   m_configObjects: {}

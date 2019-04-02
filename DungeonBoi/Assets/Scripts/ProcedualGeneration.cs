@@ -477,7 +477,7 @@ public class ProcedualGeneration : MonoBehaviour
         if (chunkToSpawn.transform.Find("EnemySpawner") != null)
         {
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Randomizer_Enemy = Random.Range(0, 2);
 

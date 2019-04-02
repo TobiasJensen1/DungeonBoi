@@ -6,8 +6,11 @@ public class PlayerMovement : MonoBehaviour
 {
 
     Rigidbody2D rb;
-    Vector2 pushForce;
+    Vector2 mousePos;
     public float speed;
+    Vector2 moveTo;
+
+    bool combat = false;
 
     float distanceX;
     float distanceY;
@@ -21,39 +24,32 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        pushForce = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         move();
-        attack();
-        
+        transform.position = Vector2.MoveTowards(transform.position, moveTo, speed * Time.deltaTime);
+
+
     }
 
 
     void move()
     {
-        if (Input.GetMouseButton(0))
-        {
-            transform.position = Vector2.MoveTowards(transform.position, pushForce, speed*Time.deltaTime);
-        }
-        
-
-    }
-
-    void attack() { 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-        if (hit.collider != null && hit.collider.transform.tag == "Enemy")
+        if (hit.collider != null)
         {
-            distanceX = transform.position.x - hit.collider.transform.position.x;
-            distanceY = transform.position.y - hit.collider.transform.position.y;
-
-            if (Input.GetMouseButton(0) && distanceX <= 0.3 && distanceX <= 0.3 ) { 
-            Destroy(hit.collider.gameObject);
-                print("attack!");
+            //Move
+            if (Input.GetMouseButtonDown(0) && hit.collider.transform.tag == "Ground")
+            {
+                moveTo = mousePos;
             }
-
-
+            
+            
         }
+
+
     }
+    
     
 
 
