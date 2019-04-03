@@ -23,6 +23,13 @@ public class Combat : MonoBehaviour
     float xp;
 
     bool combat;
+    bool firstKill;
+    static bool firstKilled;
+
+    public Sprite noheart;
+
+    GameObject spawnedItem;
+    public static List<GameObject> itemsOnFloor = new List<GameObject>();
 
 
 
@@ -84,8 +91,16 @@ public class Combat : MonoBehaviour
             player.GetComponent<PlayerStats>().health = player.GetComponent<PlayerStats>().health - spooderDmg;
             if (player.GetComponent<PlayerStats>().health <= 0)
             {
+
+                if (GameObject.Find("Player").GetComponent<PlayerStats>().revive)
+                {
+                    GameObject.Find("Player").GetComponent<PlayerStats>().health = GameObject.Find("Player").GetComponent<PlayerStats>().maxHealth;
+                    GameObject.Find("Main Camera").transform.Find("UiHealth").transform.Find("Health").transform.Find("HealthBorder").transform.Find("Canvas").transform.Find("Revive").GetComponent<SpriteRenderer>().sprite = noheart;
+                } else { 
+
                 Destroy(player);
                 SceneManager.LoadScene("DungeonBoi");
+                }
             }
             yield return new WaitForSeconds(2);
         }
@@ -102,12 +117,36 @@ public class Combat : MonoBehaviour
                 
                 player.GetComponent<PlayerStats>().playerXp = player.GetComponent<PlayerStats>().playerXp + spooderXp;
 
+                firstKill = true;
+                dropItem(gameObject);
 
-                Destroy(gameObject);
+                if(gameObject.name == "Spider(Clone)")
+                {
+                    GameObject.Find("Player").GetComponent<PlayerStats>().coins += 10;
+                } else
+                {
+                    GameObject.Find("Player").GetComponent<PlayerStats>().coins += 25;
+                }
+
+                Destroy(gameObject, 0f);
+
+                
+
             }
             yield return new WaitForSeconds(1);
         }
     }
+
+    void dropItem(GameObject enemyKilled)
+    {
+        if (firstKill && !firstKilled)
+        {
+            firstKilled = true;
+            spawnedItem = Instantiate(Resources.Load<GameObject>("Heart"), new Vector2(enemyKilled.transform.position.x, enemyKilled.transform.position.y), Quaternion.identity);
+            itemsOnFloor.Add(spawnedItem);
+        }
+    }
+
 
 
 }

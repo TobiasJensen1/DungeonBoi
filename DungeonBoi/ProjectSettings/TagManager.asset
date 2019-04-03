@@ -10,6 +10,15 @@ TagManager:
   - Enemy
   - Ground
   - Space1
+  - Space2
+  - Space3
+  - Space4
+  - Item
+  - Map
+  - Merchant
+  - Merchant1
+  - Merchant2
+  - Merchant3
   layers:
   - Default
   - TransparentFX

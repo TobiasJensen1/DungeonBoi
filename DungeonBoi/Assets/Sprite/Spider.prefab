@@ -478,6 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddfa4f44cd2b7bc4e994148f6e2bfa5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reviveObject: {fileID: 0}
+  noheart: {fileID: 21300000, guid: 2511c2184d1212e4ebae541b8720899d, type: 3}
 --- !u!50 &1056886903518946678
 Rigidbody2D:
   serializedVersion: 4

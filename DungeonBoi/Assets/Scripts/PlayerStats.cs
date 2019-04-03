@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -23,18 +24,30 @@ public class PlayerStats : MonoBehaviour
 
     public float level;
 
+    public bool revive;
+
+    public float coins;
+    public TextMeshProUGUI coinsText;
+
     // Start is called before the first frame update
     void Start()
     {
         level = 1;
         maxHealth = health;
         maxXp = 10;
+        coins = 900;
     }
 
     // Update is called once per frame
     void Update()
     {
+        coinsText.text = "" + coins;
 
+
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
         
         healthBar.setHealth(health / maxHealth);
         guiHealth.setHealth(health / maxHealth);
@@ -47,6 +60,8 @@ public class PlayerStats : MonoBehaviour
         updateLevel();
 
     }
+
+
 
     void updateLevel()
     {

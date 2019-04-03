@@ -15,9 +15,22 @@ public class PlayerMovement : MonoBehaviour
     float distanceX;
     float distanceY;
 
+    Sprite objectToAdd;
+    bool revive;
+    public bool hasHearth;
+
+
+    List<GameObject> playerInventory;
+    List<GameObject> itemsOnFloor;
+    int emptySpaces;
+    int emptyIndex;
+
+    public GameObject merchant;
+
     // Start is called before the first frame update
     void Start()
     {
+        merchant.transform.position = new Vector2(merchant.transform.position.x + 0.1f, merchant.transform.position.y + 0.1f);
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -39,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         if (hit.collider != null)
         {
             //Move
-            if (Input.GetMouseButtonDown(0) && hit.collider.transform.tag == "Ground")
+            if (Input.GetMouseButton(0) && (hit.collider.transform.tag == "Ground" || hit.collider.transform.tag == "Item"))
             {
                 moveTo = mousePos;
             }
@@ -49,9 +62,43 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
-    
-    
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
 
+        if (collision.transform.tag == "Item")
+        {
+            playerInventory = GameObject.Find("Player").GetComponent<Inventory>().inventorySlots;
 
+        for(int i = 0; i < playerInventory.Count; i++)
+        {
+                if(playerInventory[i].transform.Find("Item").GetComponent<SpriteRenderer>().sprite != null && playerInventory[i].transform.Find("Item").GetComponent<SpriteRenderer>().sprite.name == "heart")
+                {
+                    hasHearth = true;
+                }
+
+            if(playerInventory[i].transform.Find("Item").GetComponent<SpriteRenderer>().sprite == null)
+            {
+                    objectToAdd = collision.gameObject.GetComponent<SpriteRenderer>().sprite;
+                    if (objectToAdd.name == "heart" && hasHearth)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        playerInventory[i].transform.Find("Item").GetComponent<SpriteRenderer>().sprite = objectToAdd;
+                        for(int j = 0; j < Combat.itemsOnFloor.Count; j++)
+                        {
+                            if(Combat.itemsOnFloor[j].transform.position == collision.transform.position)
+                            {
+                                Destroy(Combat.itemsOnFloor[j]);
+                            }
+                        }
+                        break;
+                    }
+                    
+                }
+            }
+        }
+    }
 }
